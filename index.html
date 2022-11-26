@@ -14597,11 +14597,105 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Temp">Temp<a class="anchor-link" href="#Temp">&#182;</a></h1><p>123</p>
+<h1 id="Predicting-The-Success-of-Video-Games"><strong>Predicting The Success of Video Games</strong><a class="anchor-link" href="#Predicting-The-Success-of-Video-Games">&#182;</a></h1><h5 id="Kevin-Rathbun">Kevin Rathbun<a class="anchor-link" href="#Kevin-Rathbun">&#182;</a></h5><h3 id="1.-Introduction"><strong>1. Introduction</strong><a class="anchor-link" href="#1.-Introduction">&#182;</a></h3><p>Video game developers and companies develop their games with one major goal in mind: to produce a successful game.<br>
+But what makes a game successful and how would we measure its success? In this data exploration project I will<br>
+explore these questions to provide insight and analysis into what makes a game successful and will create a<br>
+method to predict the success of a game based on various metrics.<br>
+<br><br>
+TODO UPDATE IF GOALS CHANGE <br>
+The metrics I will be looking at are the developer, the publisher, the supported platforms, the required age<br>
+to play, the categories and genres the game falls into, and the hardware requirements to play the game.<br>
+This is by no means a comprehensive list of what makes a game successful, but will serve as useful metrics<br>
+in determining the success of a game. To measure success, I will look at playtimes of users, the ratings of the<br>
+game, and the revenue generated from sales.<br>
+<br><br>
+A dataset produced by Nik Davis on Kaggle (available at <a href="https://www.kaggle.com/datasets/nikdavis/steam-store-games">https://www.kaggle.com/datasets/nikdavis/steam-store-games</a>)<br>
+will serve very nicely for my analysis. This dataset contains the metrics I need on over 27,000 Steam games.<br>
+<br><br>
+What is Steam? Steam is a digital PC game distribution platform created by Valve Corporation in 2003.<br>
+It is the largest and most popular platform for PC gaming worldwide with over 30,000 games. With Steam,<br>
+users are able to browse the store for games, watch game trailers, interact with friends, received tailored<br>
+game recommendations, and much more.<br>
+(sources: <a href="https://pcgamesforsteam.com/what-is-steam">https://pcgamesforsteam.com/what-is-steam</a>,<br>
+<a href="https://www.uktech.news/other_news/best-pc-video-game-digital-distribution-services">https://www.uktech.news/other_news/best-pc-video-game-digital-distribution-services</a>)<br></p>
+<h4>The Dataset:<br></h4>
+<p><strong>18 Columns:</strong><br>
+<strong>0: appid:</strong><br>
+    The unique appid (integer) associated with the game<br>
+<strong>1: name:</strong><br>
+    The name of the game<br>
+<strong>2: release_date:</strong><br>
+    When the game was first released on Steam in YYYY-MM-DD format<br>
+<strong>3: english:</strong><br>
+    1 if the game is in English, 0 otherwise<br>
+<strong>4: developer:</strong><br>
+    Name(s) of developer(s) separated by semicolon if multiple<br>
+<strong>5: publisher:</strong><br>
+    Name(s) of publisher(s) separated by semicolon if multiple<br>
+<strong>6: platforms:</strong><br>
+    The supported platform(s) separated by semicolons if multiple.<br>
+    Possible platforms are windows;mac;linux.<br>
+<strong>7: required_age:</strong><br>
+    Minimum age required according to PEGI UK standards.<br>
+    Entries of 0 are unrated or unsupplied<br>
+<strong>8: categories:</strong><br>
+    Categories associated with the game separated by semicolons e.g., Single-player;Multi-player<br>
+<strong>9: genres:</strong><br>
+    The generes associated with the game separated by semicolons e.g., Action;Indie<br>
+<strong>10: steamspy_tags:</strong><br>
+    The steamspy_tags associated with the game separated by semicolons.<br>
+    Similar to genres, but are community voted e.g., Action;Indie<br>
+<strong>11: achievements:</strong><br>
+    Number of achievements in the game<br>
+<strong>12: positive_ratings:</strong><br>
+    Number of positive ratings on Steam<br>
+<strong>13: negative_ratings:</strong><br>
+    Number of negative ratings on Steam<br>
+<strong>14: average_playtime:</strong><br>
+    Average playtime of users in minutes<br>
+<strong>15: median_playtime:</strong><br>
+    Median playtime of users in minutes<br>
+<strong>16: owners:</strong><br>
+    Estimated number of owners (lower and upper bound) e.g., 20000-50000<br>
+<strong>17: price:</strong><br>
+    Price of game in GBP<br></p>
+<h4>Important Notes:<br></h4>
+<p>It is important to note that this data was gathered around May of 2019, so it is not entirely representative of<br>
+the games on Steam today or the metrics associated with them.<br>
+It should also be noted that Steam is for PC games <em>only</em> so this data is not representative of console games<br>
+or their playerbase.<br></p>
 
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="2.-Gathering-and-Transforming-the-Data"><strong>2. Gathering and Transforming the Data</strong><a class="anchor-link" href="#2.-Gathering-and-Transforming-the-Data">&#182;</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -14610,8 +14704,12 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;456&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Increase the max number of columns and rows which can be displayed</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;max_columns&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;max_rows&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="c1"># Load the csv into a pandas dataframe</span>
+<span class="n">games_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;steam_games.csv&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">games_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 
      </div>
@@ -14630,10 +14728,154 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Testing
-456
-</pre>
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>appid</th>
+      <th>name</th>
+      <th>release_date</th>
+      <th>english</th>
+      <th>developer</th>
+      <th>publisher</th>
+      <th>platforms</th>
+      <th>required_age</th>
+      <th>categories</th>
+      <th>genres</th>
+      <th>steamspy_tags</th>
+      <th>achievements</th>
+      <th>positive_ratings</th>
+      <th>negative_ratings</th>
+      <th>average_playtime</th>
+      <th>median_playtime</th>
+      <th>owners</th>
+      <th>price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>10</td>
+      <td>Counter-Strike</td>
+      <td>2000-11-01</td>
+      <td>1</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>windows;mac;linux</td>
+      <td>0</td>
+      <td>Multi-player;Online Multi-Player;Local Multi-P...</td>
+      <td>Action</td>
+      <td>Action;FPS;Multiplayer</td>
+      <td>0</td>
+      <td>124534</td>
+      <td>3339</td>
+      <td>17612</td>
+      <td>317</td>
+      <td>10000000-20000000</td>
+      <td>7.19</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20</td>
+      <td>Team Fortress Classic</td>
+      <td>1999-04-01</td>
+      <td>1</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>windows;mac;linux</td>
+      <td>0</td>
+      <td>Multi-player;Online Multi-Player;Local Multi-P...</td>
+      <td>Action</td>
+      <td>Action;FPS;Multiplayer</td>
+      <td>0</td>
+      <td>3318</td>
+      <td>633</td>
+      <td>277</td>
+      <td>62</td>
+      <td>5000000-10000000</td>
+      <td>3.99</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>30</td>
+      <td>Day of Defeat</td>
+      <td>2003-05-01</td>
+      <td>1</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>windows;mac;linux</td>
+      <td>0</td>
+      <td>Multi-player;Valve Anti-Cheat enabled</td>
+      <td>Action</td>
+      <td>FPS;World War II;Multiplayer</td>
+      <td>0</td>
+      <td>3416</td>
+      <td>398</td>
+      <td>187</td>
+      <td>34</td>
+      <td>5000000-10000000</td>
+      <td>3.99</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>40</td>
+      <td>Deathmatch Classic</td>
+      <td>2001-06-01</td>
+      <td>1</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>windows;mac;linux</td>
+      <td>0</td>
+      <td>Multi-player;Online Multi-Player;Local Multi-P...</td>
+      <td>Action</td>
+      <td>Action;FPS;Multiplayer</td>
+      <td>0</td>
+      <td>1273</td>
+      <td>267</td>
+      <td>258</td>
+      <td>184</td>
+      <td>5000000-10000000</td>
+      <td>3.99</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>50</td>
+      <td>Half-Life: Opposing Force</td>
+      <td>1999-11-01</td>
+      <td>1</td>
+      <td>Gearbox Software</td>
+      <td>Valve</td>
+      <td>windows;mac;linux</td>
+      <td>0</td>
+      <td>Single-player;Multi-player;Valve Anti-Cheat en...</td>
+      <td>Action</td>
+      <td>FPS;Action;Sci-fi</td>
+      <td>0</td>
+      <td>5250</td>
+      <td>288</td>
+      <td>624</td>
+      <td>415</td>
+      <td>5000000-10000000</td>
+      <td>3.99</td>
+    </tr>
+  </tbody>
+</table>
 </div>
 </div>
 
@@ -14641,6 +14883,20 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 </div>
 
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Now, lets transform the dataframe to be better suited for our data analysis by removing unnecessary columns and transforming columns to be better suited for analysis.</p>
+
+</div>
+</div>
+</div>
 </div>
 </body>
 
