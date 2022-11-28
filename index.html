@@ -14599,12 +14599,13 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h1 id="Predicting-The-Success-of-Video-Games"><strong><p align="center">Predicting The Success of Video Games</p></strong><a class="anchor-link" href="#Predicting-The-Success-of-Video-Games">&#182;</a></h1><h5 id="Kevin-Rathbun"><p align="center">Kevin Rathbun</p><a class="anchor-link" href="#Kevin-Rathbun">&#182;</a></h5><h3 id="1.-Introduction"><strong>1. Introduction</strong><a class="anchor-link" href="#1.-Introduction">&#182;</a></h3><p>Video game developers and companies develop their games with one major goal in mind: to produce a successful game.<br>
 But what makes a game successful and how would we measure its success? In this data exploration project I will<br>
-explore these questions to provide insight and analysis into what makes a game successful and will create a<br>
-method to predict the success of a game based on various metrics.<br>
+explore these questions to provide insight and analysis into what makes a game successful. Further, I will create a<br>
+method to predict the success of a game based on various metrics. This will be useful for video game developers<br>
+in determining what they could be doing to improve their chance of creating a successful game.<br>
 <br><br>
 TODO UPDATE IF GOALS CHANGE <br>
-The metrics I will be looking at are the release date, the developer, the publisher, the supported platforms,<br>
-the categories and genres the game falls into, the price, and the hardware requirements to play the game.<br>
+The metrics I will be looking at are the release date, developer, publisher, supported platforms,<br>
+categories and genres the game falls into, price, and hardware requirements to play the game.<br>
 This is by no means a comprehensive list of what determines the success of a game, but will serve as useful metrics<br>
 in predicting success. To measure success, I will look at average playtimes of users, the ratings of the<br>
 game, and the revenue generated from sales.<br>
@@ -14614,9 +14615,9 @@ will serve very nicely for my analysis. This dataset contains the metrics I need
 <br><br>
 What is Steam? Steam is a digital PC game distribution platform created by Valve Corporation in 2003.<br>
 It is the largest and most popular platform for PC gaming worldwide with over 30,000 games. With Steam,<br>
-users are able to browse the store for games, watch game trailers, interact with friends, received tailored<br>
-game recommendations, and much more. Because of its popularity and huge number of diverse games, it will<br>
-be a great platform to use in my exploration.
+users are able to browse the store for games, watch game trailers, interact and play with friends, receive<br>
+tailored game recommendations, and much more. Because of its popularity and huge number of diverse games,<br>
+it will be a great platform to use in my exploration.<br>
 (sources: <a href="https://pcgamesforsteam.com/what-is-steam">https://pcgamesforsteam.com/what-is-steam</a>,<br>
 <a href="https://www.uktech.news/other_news/best-pc-video-game-digital-distribution-services">https://www.uktech.news/other_news/best-pc-video-game-digital-distribution-services</a>).<br></p>
 <h4>The Dataset:<br></h4>
@@ -14676,7 +14677,10 @@ or their playerbase.<br></p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="2.-Gathering-and-Transforming-the-Data"><strong>2. Gathering and Transforming the Data</strong><a class="anchor-link" href="#2.-Gathering-and-Transforming-the-Data">&#182;</a></h3>
+<h3 id="2.-Gathering-and-Transforming-the-Data"><strong>2. Gathering and Transforming the Data</strong><a class="anchor-link" href="#2.-Gathering-and-Transforming-the-Data">&#182;</a></h3><p>To begin, let's gather the data we need and transform it to suit our goals.<br>
+Here we gather the two datasets we need: the dataset described in the introduction<br>
+as well as the hardware requirements dataset (also available at <a href="https://www.kaggle.com/datasets/nikdavis/steam-store-games">https://www.kaggle.com/datasets/nikdavis/steam-store-games</a>).<br></p>
+
 </div>
 </div>
 </div>
@@ -14692,6 +14696,7 @@ or their playerbase.<br></p>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MultiLabelBinarizer</span>
 </pre></div>
 
      </div>
@@ -14708,7 +14713,7 @@ or their playerbase.<br></p>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Increase the max number of columns and rows which can be displayed</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;max_columns&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;max_columns&quot;</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;max_rows&quot;</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 <span class="c1"># Load the steam_games csv into a pandas dataframe</span>
 <span class="n">games_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;steam_games.csv&#39;</span><span class="p">)</span>
@@ -15177,19 +15182,21 @@ Name: required_age, dtype: int64
 <p>Now, lets transform the dataframe to be better suited for our data analysis by removing unnecessary columns and transforming columns to be better suited for analysis.<br></p>
 <br>
 The columns we will be removing are:<br>
-**english**: Even if games in English are associated with more or less success, it doesn't really tell us anything<br>
+<p><strong>english</strong>: Even if games in English are associated with more or less success, it doesn't really tell us anything<br>
 about the game itself.<br>
-**achievements**: The number of achievements in a game is most likely not a good indicator of success.<br>
-**required_age**: As shown above, the dataset contains mostly 0s for this metric so it will not be very useful.<br>
-**positive_ratings and negative_ratings**: Instead, we will have one ratings column for the percent of people who rated positively.<br>
+<strong>achievements</strong>: The number of achievements in a game is most likely not a good indicator of success.<br>
+<strong>required_age</strong>: As shown above, the dataset contains mostly 0s for this metric so it will not be very useful.<br>
+<strong>positive_ratings and negative_ratings</strong>: Instead, we will have one ratings column for the percent of people who rated positively.<br>
+<strong>steamspy_tags</strong>: Instead, we will just focus on genres. The number of tags (300+) prevents useful analysis.<br></p>
 <br>
-The columns we will be transforming are:<br>
-**release_date**: Only the year is important<br>
-**platforms, categories, genres, and steamspy_tags**: One-hot encode for easier analysis<br>
-**owners**: Is currently a range--just take the middle of this range<br>
-**minimum**: Currently has all the minimum hardware requirements... Instead we will just look at the minimum ram<br>
-requirement (in GB) so we have a metric which can easily be compared across games.
-<p>We will also add a new column <strong>est_revenue</strong> which is a product of the number of owners and the price to estimate the revenue of the game</p>
+<p>The columns we will be transforming are:<br></p>
+<p><strong>release_date</strong> : Only the year is important<br>
+<strong>platforms, categories, genres</strong>: One-hot encode for easier analysis<br>
+<strong>owners</strong>: Is currently a range--just take the middle of this range<br>
+<strong>minimum</strong>: Currently has all the minimum hardware requirements... Instead we will just look at the minimum ram<br>
+requirement (in GB) so we have a metric which can easily be compared across games.</p>
+<p>We will also add a new column <strong>est_revenue</strong> which is a product of the number of owners and the price to estimate the revenue of the game<br>
+(in GBP)<br></p>
 
 </div>
 </div>
@@ -15240,7 +15247,7 @@ requirement (in GB) so we have a metric which can easily be compared across game
 <span class="c1"># Join the two dataframes on appid</span>
 <span class="n">games_df</span> <span class="o">=</span> <span class="n">games_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">requirements_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;steam_appid&quot;</span><span class="p">),</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;appid&quot;</span><span class="p">])</span>
 <span class="c1"># Drop unneeded columns mentioned above</span>
-<span class="n">games_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="s1">&#39;achievements&#39;</span><span class="p">,</span> <span class="s1">&#39;required_age&#39;</span><span class="p">,</span> <span class="s1">&#39;positive_ratings&#39;</span><span class="p">,</span> <span class="s1">&#39;negative_ratings&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">games_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="s1">&#39;achievements&#39;</span><span class="p">,</span> <span class="s1">&#39;required_age&#39;</span><span class="p">,</span> <span class="s1">&#39;positive_ratings&#39;</span><span class="p">,</span> <span class="s1">&#39;negative_ratings&#39;</span><span class="p">,</span> <span class="s1">&#39;steamspy_tags&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># Drop unneeded columns resulting from joining the 2 dataframes</span>
 <span class="n">games_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pc_requirements&#39;</span><span class="p">,</span> <span class="s1">&#39;mac_requirements&#39;</span><span class="p">,</span> <span class="s1">&#39;linux_requirements&#39;</span><span class="p">,</span> <span class="s1">&#39;recommended&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;minimum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;minimum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">transform_reqs</span><span class="p">)</span>
@@ -15294,7 +15301,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <th>platforms</th>
       <th>categories</th>
       <th>genres</th>
-      <th>steamspy_tags</th>
       <th>average_playtime</th>
       <th>median_playtime</th>
       <th>owners</th>
@@ -15315,7 +15321,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Multi-player;Online Multi-Player;Local Multi-P...</td>
       <td>Action</td>
-      <td>Action;FPS;Multiplayer</td>
       <td>17612</td>
       <td>317</td>
       <td>15000000</td>
@@ -15334,7 +15339,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Multi-player;Online Multi-Player;Local Multi-P...</td>
       <td>Action</td>
-      <td>Action;FPS;Multiplayer</td>
       <td>277</td>
       <td>62</td>
       <td>7500000</td>
@@ -15353,7 +15357,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Multi-player;Valve Anti-Cheat enabled</td>
       <td>Action</td>
-      <td>FPS;World War II;Multiplayer</td>
       <td>187</td>
       <td>34</td>
       <td>7500000</td>
@@ -15372,7 +15375,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Multi-player;Online Multi-Player;Local Multi-P...</td>
       <td>Action</td>
-      <td>Action;FPS;Multiplayer</td>
       <td>258</td>
       <td>184</td>
       <td>7500000</td>
@@ -15391,7 +15393,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Single-player;Multi-player;Valve Anti-Cheat en...</td>
       <td>Action</td>
-      <td>FPS;Action;Sci-fi</td>
       <td>624</td>
       <td>415</td>
       <td>7500000</td>
@@ -15410,7 +15411,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Multi-player;Online Multi-Player;Valve Anti-Ch...</td>
       <td>Action</td>
-      <td>Action;FPS;Multiplayer</td>
       <td>175</td>
       <td>10</td>
       <td>7500000</td>
@@ -15429,7 +15429,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Single-player;Multi-player;Online Multi-Player...</td>
       <td>Action</td>
-      <td>FPS;Classic;Action</td>
       <td>1300</td>
       <td>83</td>
       <td>7500000</td>
@@ -15448,7 +15447,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Single-player;Multi-player;Valve Anti-Cheat en...</td>
       <td>Action</td>
-      <td>Action;FPS;Multiplayer</td>
       <td>427</td>
       <td>43</td>
       <td>15000000</td>
@@ -15467,7 +15465,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Single-player</td>
       <td>Action</td>
-      <td>FPS;Action;Sci-fi</td>
       <td>361</td>
       <td>205</td>
       <td>7500000</td>
@@ -15486,7 +15483,6 @@ requirement (in GB) so we have a metric which can easily be compared across game
       <td>windows;mac;linux</td>
       <td>Single-player;Steam Achievements;Steam Trading...</td>
       <td>Action</td>
-      <td>FPS;Action;Sci-fi</td>
       <td>691</td>
       <td>402</td>
       <td>15000000</td>
@@ -15506,6 +15502,1008 @@ requirement (in GB) so we have a metric which can easily be compared across game
 
 </div>
 
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># A helper function used to see the unique elements over an entire column in games_df.</span>
+<span class="c1"># Each element of the column should be a list e.g., [&#39;Action&#39;, &#39;Indie&#39;]</span>
+<span class="k">def</span> <span class="nf">unique_col_elts</span><span class="p">(</span><span class="n">column_name</span><span class="p">):</span>
+    <span class="n">col_as_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">games_df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]]</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">col_as_list</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">e1</span> <span class="ow">in</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new</span><span class="p">:</span>
+                <span class="n">new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unique entries:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Length:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new</span><span class="p">))</span>
+
+<span class="c1"># Turn platforms column into a list splitting on &#39;;&#39; in order to do one-hot encoding</span>
+<span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;platforms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;platforms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span>
+<span class="c1"># One-hot encode platforms</span>
+<span class="n">mlb</span> <span class="o">=</span> <span class="n">MultiLabelBinarizer</span><span class="p">()</span>
+<span class="n">mlb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;platforms&#39;</span><span class="p">])</span>
+<span class="n">new_col_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;platform_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">mlb</span><span class="o">.</span><span class="n">classes_</span><span class="p">]</span>
+<span class="c1"># Create new DataFrame with one-hot encoded platforms</span>
+<span class="n">platforms</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">mlb</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;platforms&#39;</span><span class="p">]),</span> <span class="n">columns</span><span class="o">=</span><span class="n">new_col_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;platforms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="c1"># Join platforms into games_df</span>
+<span class="n">games_df</span> <span class="o">=</span> <span class="n">games_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">platforms</span><span class="p">)</span>
+
+<span class="c1"># Turn genres column into a list splitting on &#39;;&#39; in order to do one-hot encoding</span>
+<span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;genres&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;genres&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span>
+<span class="c1"># One-hot encode genres</span>
+<span class="n">mlb</span> <span class="o">=</span> <span class="n">MultiLabelBinarizer</span><span class="p">()</span>
+<span class="n">mlb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;genres&#39;</span><span class="p">])</span>
+<span class="n">new_col_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;genre_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">mlb</span><span class="o">.</span><span class="n">classes_</span><span class="p">]</span>
+<span class="c1"># Create new DataFrame with one-hot encoded genres</span>
+<span class="n">genres</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">mlb</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;genres&#39;</span><span class="p">]),</span> <span class="n">columns</span><span class="o">=</span><span class="n">new_col_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;genres&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="c1"># Join genres into games_df</span>
+<span class="n">games_df</span> <span class="o">=</span> <span class="n">games_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">genres</span><span class="p">)</span>
+
+<span class="c1"># Turn categories column into a list splitting on &#39;;&#39; in order to do one-hot encoding</span>
+<span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;categories&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;categories&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span>
+<span class="c1"># One-hot encode categories</span>
+<span class="n">mlb</span> <span class="o">=</span> <span class="n">MultiLabelBinarizer</span><span class="p">()</span>
+<span class="n">mlb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">])</span>
+<span class="n">new_col_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;category_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">mlb</span><span class="o">.</span><span class="n">classes_</span><span class="p">]</span>
+<span class="c1"># Create new DataFrame with one-hot encoded categories</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">mlb</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">]),</span> <span class="n">columns</span><span class="o">=</span><span class="n">new_col_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">games_df</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="c1"># Join categories into games_df</span>
+<span class="n">games_df</span> <span class="o">=</span> <span class="n">games_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">games_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dimensionality of DataFrame:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">games_df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>appid</th>
+      <th>name</th>
+      <th>release_date</th>
+      <th>developer</th>
+      <th>publisher</th>
+      <th>platforms</th>
+      <th>categories</th>
+      <th>genres</th>
+      <th>average_playtime</th>
+      <th>median_playtime</th>
+      <th>owners</th>
+      <th>price</th>
+      <th>rating</th>
+      <th>min_req_ram</th>
+      <th>est_revenue</th>
+      <th>platform_linux</th>
+      <th>platform_mac</th>
+      <th>platform_windows</th>
+      <th>genre_Accounting</th>
+      <th>genre_Action</th>
+      <th>genre_Adventure</th>
+      <th>genre_Animation &amp; Modeling</th>
+      <th>genre_Audio Production</th>
+      <th>genre_Casual</th>
+      <th>genre_Design &amp; Illustration</th>
+      <th>genre_Documentary</th>
+      <th>genre_Early Access</th>
+      <th>genre_Education</th>
+      <th>genre_Free to Play</th>
+      <th>genre_Game Development</th>
+      <th>genre_Gore</th>
+      <th>genre_Indie</th>
+      <th>genre_Massively Multiplayer</th>
+      <th>genre_Nudity</th>
+      <th>genre_Photo Editing</th>
+      <th>genre_RPG</th>
+      <th>genre_Racing</th>
+      <th>genre_Sexual Content</th>
+      <th>genre_Simulation</th>
+      <th>genre_Software Training</th>
+      <th>genre_Sports</th>
+      <th>genre_Strategy</th>
+      <th>genre_Tutorial</th>
+      <th>genre_Utilities</th>
+      <th>genre_Video Production</th>
+      <th>genre_Violent</th>
+      <th>genre_Web Publishing</th>
+      <th>category_Captions available</th>
+      <th>category_Co-op</th>
+      <th>category_Commentary available</th>
+      <th>category_Cross-Platform Multiplayer</th>
+      <th>category_Full controller support</th>
+      <th>category_In-App Purchases</th>
+      <th>category_Includes Source SDK</th>
+      <th>category_Includes level editor</th>
+      <th>category_Local Co-op</th>
+      <th>category_Local Multi-Player</th>
+      <th>category_MMO</th>
+      <th>category_Mods</th>
+      <th>category_Mods (require HL2)</th>
+      <th>category_Multi-player</th>
+      <th>category_Online Co-op</th>
+      <th>category_Online Multi-Player</th>
+      <th>category_Partial Controller Support</th>
+      <th>category_Shared/Split Screen</th>
+      <th>category_Single-player</th>
+      <th>category_Stats</th>
+      <th>category_Steam Achievements</th>
+      <th>category_Steam Cloud</th>
+      <th>category_Steam Leaderboards</th>
+      <th>category_Steam Trading Cards</th>
+      <th>category_Steam Turn Notifications</th>
+      <th>category_Steam Workshop</th>
+      <th>category_SteamVR Collectibles</th>
+      <th>category_VR Support</th>
+      <th>category_Valve Anti-Cheat enabled</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>10</td>
+      <td>Counter-Strike</td>
+      <td>2000</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Multi-player, Online Multi-Player, Local Mult...</td>
+      <td>[Action]</td>
+      <td>17612</td>
+      <td>317</td>
+      <td>15000000</td>
+      <td>7.19</td>
+      <td>0.973888</td>
+      <td>0.096</td>
+      <td>107850000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20</td>
+      <td>Team Fortress Classic</td>
+      <td>1999</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Multi-player, Online Multi-Player, Local Mult...</td>
+      <td>[Action]</td>
+      <td>277</td>
+      <td>62</td>
+      <td>7500000</td>
+      <td>3.99</td>
+      <td>0.839787</td>
+      <td>0.096</td>
+      <td>29925000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>30</td>
+      <td>Day of Defeat</td>
+      <td>2003</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Multi-player, Valve Anti-Cheat enabled]</td>
+      <td>[Action]</td>
+      <td>187</td>
+      <td>34</td>
+      <td>7500000</td>
+      <td>3.99</td>
+      <td>0.895648</td>
+      <td>0.096</td>
+      <td>29925000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>40</td>
+      <td>Deathmatch Classic</td>
+      <td>2001</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Multi-player, Online Multi-Player, Local Mult...</td>
+      <td>[Action]</td>
+      <td>258</td>
+      <td>184</td>
+      <td>7500000</td>
+      <td>3.99</td>
+      <td>0.826623</td>
+      <td>0.096</td>
+      <td>29925000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>50</td>
+      <td>Half-Life: Opposing Force</td>
+      <td>1999</td>
+      <td>Gearbox Software</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Single-player, Multi-player, Valve Anti-Cheat...</td>
+      <td>[Action]</td>
+      <td>624</td>
+      <td>415</td>
+      <td>7500000</td>
+      <td>3.99</td>
+      <td>0.947996</td>
+      <td>0.096</td>
+      <td>29925000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>60</td>
+      <td>Ricochet</td>
+      <td>2000</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Multi-player, Online Multi-Player, Valve Anti...</td>
+      <td>[Action]</td>
+      <td>175</td>
+      <td>10</td>
+      <td>7500000</td>
+      <td>3.99</td>
+      <td>0.801278</td>
+      <td>0.096</td>
+      <td>29925000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>70</td>
+      <td>Half-Life</td>
+      <td>1998</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Single-player, Multi-player, Online Multi-Pla...</td>
+      <td>[Action]</td>
+      <td>1300</td>
+      <td>83</td>
+      <td>7500000</td>
+      <td>7.19</td>
+      <td>0.961878</td>
+      <td>0.096</td>
+      <td>53925000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>80</td>
+      <td>Counter-Strike: Condition Zero</td>
+      <td>2004</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Single-player, Multi-player, Valve Anti-Cheat...</td>
+      <td>[Action]</td>
+      <td>427</td>
+      <td>43</td>
+      <td>15000000</td>
+      <td>7.19</td>
+      <td>0.893871</td>
+      <td>0.096</td>
+      <td>107850000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>130</td>
+      <td>Half-Life: Blue Shift</td>
+      <td>2001</td>
+      <td>Gearbox Software</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Single-player]</td>
+      <td>[Action]</td>
+      <td>361</td>
+      <td>205</td>
+      <td>7500000</td>
+      <td>3.99</td>
+      <td>0.900990</td>
+      <td>0.096</td>
+      <td>29925000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>220</td>
+      <td>Half-Life 2</td>
+      <td>2004</td>
+      <td>Valve</td>
+      <td>Valve</td>
+      <td>[windows, mac, linux]</td>
+      <td>[Single-player, Steam Achievements, Steam Trad...</td>
+      <td>[Action]</td>
+      <td>691</td>
+      <td>402</td>
+      <td>15000000</td>
+      <td>7.19</td>
+      <td>0.965601</td>
+      <td>0.512</td>
+      <td>107850000.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>Dimensionality of DataFrame:
+(27075, 76)
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>We now have our DataFrame with all the necessary data and in the form we want it.<br>
+We can now move on to the next step.</p>
+<h3 id="3.-Exploring-the-Data:-Visualization-and-Analysis"><strong>3. Exploring the Data: Visualization and Analysis</strong><a class="anchor-link" href="#3.-Exploring-the-Data:-Visualization-and-Analysis">&#182;</a></h3>
+</div>
+</div>
+</div>
 </div>
 </body>
 
