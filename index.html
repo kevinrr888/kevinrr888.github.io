@@ -14598,17 +14598,15 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h1 id="Predicting-The-Success-of-Video-Games"><strong><p align="center">Predicting The Success of Video Games</p></strong><a class="anchor-link" href="#Predicting-The-Success-of-Video-Games">&#182;</a></h1><h3 id="Kevin-Rathbun"><p align="center">Kevin Rathbun</p><a class="anchor-link" href="#Kevin-Rathbun">&#182;</a></h3><h3 id="1.-Introduction"><strong>1. Introduction</strong><a class="anchor-link" href="#1.-Introduction">&#182;</a></h3><p>Video game developers and companies develop their games with one major goal in mind: to produce a successful game.<br>
-But what makes a game successful and how would we measure its success? In this data exploration project I will<br>
-explore these questions to provide insight and analysis into what makes a game successful. Further, I will create a<br>
-method to predict the success of a game based on various metrics. This will be useful for video game developers<br>
-in determining what they could be doing to improve their chance of creating a successful game.<br>
+But what makes a game successful and how would we measure its success? In this data exploration project, I will<br>
+explore these questions. This will be useful for video game developers in determining what they could be doing to<br>
+improve their chance of creating a successful game. This will also serve to show what players value in a video game.<br>
 <br><br>
-TODO UPDATE IF GOALS CHANGE <br>
-The metrics I will be looking at are the release date, developer, publisher, supported platforms,<br>
-categories and genres the game falls into, price, and hardware requirements to play the game.<br>
-This is by no means a comprehensive list of what determines the success of a game, but will serve as useful metrics<br>
-in predicting success. To measure success, I will look at average playtimes of users, the ratings of the<br>
-game, and the revenue generated from sales.<br>
+The metrics I will be looking at are genres, categories, price, and hardware requirements to play the game.<br>
+This is by no means a comprehensive list of what determines the success of a game, but will serve as useful<br>
+predictive metrics. To measure success, I will look at revenue generated from sales, average playtimes of users,<br>
+and the ratings of the game. These are good diverse ways to measure success as it shows how much money the companies<br>
+made, how much people play the game, and how satisfied people are with the game.<br>
 <br><br>
 A dataset produced by Nik Davis on Kaggle (available at <a href="https://www.kaggle.com/datasets/nikdavis/steam-store-games">https://www.kaggle.com/datasets/nikdavis/steam-store-games</a>)<br>
 will serve very nicely for my analysis. This dataset contains the metrics I need on over 27,000 Steam games.<br>
@@ -16506,7 +16504,8 @@ requirement (in GB) so we have a metric which can easily be compared across game
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>We now have our DataFrame with all the necessary data and in the form we want it.<br>
 We can now move on to the next step.</p>
-<h3 id="3.-Exploring-the-Data:-Visualization-and-Analysis"><strong>3. Exploring the Data: Visualization and Analysis</strong><a class="anchor-link" href="#3.-Exploring-the-Data:-Visualization-and-Analysis">&#182;</a></h3><p>We will now work to visualize the data in order to find trends.<br></p>
+<h3 id="3.-Exploring-the-Data:-Visualization-and-Analysis"><strong>3. Exploring the Data: Visualization and Analysis</strong><a class="anchor-link" href="#3.-Exploring-the-Data:-Visualization-and-Analysis">&#182;</a></h3><p>We will now work to visualize the data in order to find trends in how genres, categories,<br>
+price, and hardware requirements relate to success (revenue, playtime, and rating).<br></p>
 <h4 id="3.1-Game-Genre-and-Success"><strong>3.1 Game Genre and Success</strong><a class="anchor-link" href="#3.1-Game-Genre-and-Success">&#182;</a></h4><p>Let's begin by looking at how the genre of a game relates to its success.<br>
 We will look at how the genre relates to the revenue, playtime, and rating.<br></p>
 
@@ -17484,7 +17483,13 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>TODO EXPLAIN RESULTS HERE TODO</p>
+<p>There is a clear outlier here: MMO (Massively Multiplayer Online) games have double the average playtime of any other <br>
+category. This is perhaps not too suprising given the success of the Massively Multiplayer genre we discussed in 3.1.<br>
+These results are another indication that multiplayer games are played a lot more compared to other categories.<br>
+As we can see, 2 of the top 3 categories in terms of playtime are multiplayer (MMO and Cross-Playform Multiplayer).<br>
+The other category in the top 3 is in-app purchases. This is a mostly free-to-play category (as we can see from the<br>
+median revenue of this category being 0), so this is another indicator that free-to-play games are played a lot<br>
+compared to other categories.<br></p>
 
 </div>
 </div>
@@ -17509,14 +17514,14 @@ class="
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">38</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Genre&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Category&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average Rating&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average Rating Per Genre&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Average Rating Per Category&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
 <span class="n">cat_to_rating</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="c1"># For each genre we will plot the average rating</span>
+<span class="c1"># For each category we will plot the average rating</span>
 <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">categories</span><span class="p">:</span>
-    <span class="c1"># Filter the df to just include the rows/games which are the genre &#39;genre&#39;</span>
+    <span class="c1"># Filter the df to just include the rows/games which are the category &#39;cat&#39;</span>
     <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">games_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">games_df</span><span class="p">[</span><span class="s2">&quot;category_&quot;</span> <span class="o">+</span> <span class="n">cat</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
     <span class="c1"># Round to avoid long chart labels</span>
     <span class="n">cat_to_rating</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">cat</span> <span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]),</span> <span class="mi">4</span><span class="p">)})</span>
@@ -17567,7 +17572,20 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>TODO EXPLAIN RESULTS HERE TODO</p>
+<p>Most of the categories have an average rating in the 70% - 80% range. However, the two lowest are well below the rest<br>
+with average ratings of 64% and 62%. These two categories are in-app purchases and MMO. The low rating of the in-app<br>
+purchase category suggests that players do not like companies urging players to pay for in-game currency or items.<br>
+In-app purchases are used to improve your character or overall experience, and many games urge users to pay for these<br>
+improvements since many of these games are free-to-play (in-app purchases is how they make money). These low ratings<br>
+show that this may be a hindrance on the user experience (source and more info:<br>
+<a href="https://www.androidauthority.com/in-app-purchases-good-bad-ugly-truth-324604/">https://www.androidauthority.com/in-app-purchases-good-bad-ugly-truth-324604/</a>).<br></p>
+<br>
+MMOs have low ratings for the same reasons outlined in section 3.1 about Massively Multiplayer games.<br>
+<br>
+The categories which have the 5 highest ratings are local co-op, full controller support, includes level editor,<br>
+shared/split screen, and local multi-player. This indicates that players highly value being able to play with friends<br>
+together in person (local co-op, shared/split screen, and local multi-player), they value being able to play their<br>
+PC games with a controller, and they value level customization.<br>
 
 </div>
 </div>
@@ -18228,6 +18246,54 @@ was not sufficient.<br>
 If these results are representative of hardware requirements in general, the results are pretty suprising. One might think<br>
 that higher hardware requirements means a more visually appealing game, and thus more successful, however, this does not<br>
 appear to be the case.<br>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="4.-Conclusions"><strong>4. Conclusions</strong><a class="anchor-link" href="#4.-Conclusions">&#182;</a></h4><p>From our analysis of game genres and success, we found that, in terms of average revenue, RPG, Massively Multiplayer,<br>
+Action, and Strategy games make the most. If we instead look at median revenue, we find different results. The median<br>
+revenue is significantly lower for all of these genres showing that there are a small percentage of games in these<br>
+genres making a lot of money. RPGs and Strategy games are still highly ranked in terms of median revenue, however.<br>
+In terms of the playtimes for the different game genres, we found that Massively Multiplayer, Free to Play, and RPG<br>
+games are significantly ahead of the other genres. On the other hand, Massively Multiplayer games were rated the lowest<br>
+by a significant margin.<br></p>
+<br>
+For both the mean and median revenue per category, the top 3 categories are Co-op, Multiplayer, and Includes Level Editor.<br>
+Two of these three are directly indicative of playing with other players. This suggests that players highly value being able to<br>
+play with and against other players. The other category, includes level editor, suggests that players value being able to<br>
+customize the game to suit their desires. In terms of playtime, MMO games have double the average playtime of any other <br>
+category. Two of the top 3 categories in terms of playtime are indicative of multiplayer games (MMO and<br>
+Cross-Playform Multiplayer). The other category in the top 3 is in-app purchases. This is a mostly free-to-play category,<br>
+so this is another indicator that free-to-play games are played a lot compared to other categories. In terms of rating,<br>
+however, MMOs and in-app purchases have the lowest ratings by a significant margin which is a direct contrast to their<br>
+high playtimes.<br>
+<br>
+In our analysis of game price and success, we found that a higher priced game seems to be strongly correlated with a<br>
+higher revenue. This is not too suprising given that, for example, a game that is £20 will have to sell 3x as many copies<br>
+as a £60 game to make the same revenue. Also, in general, higher priced games have more work that go into them<br>
+which may lead to a higher quality game/more desirable game on average. It doesn't seem like a lower price/more accessible game<br>
+is enough to cause the game to generate more revenue than a higher priced game on average. In terms of playtime and rating, a<br>
+higher price is (at *most*) only slightly correlated with a higher playtime and rating.<br>
+<br>
+In order to analyze hardware requirements, I looked only at the required RAM so that I would have a metric which could<br>
+be easily compared across different games. Looking at the RAM requirement, it did not seem that it had any impact on<br>
+success. This could be extrapolated to suggest that hardware requirements do not impact success. If this is true, this<br>
+is somewhat suprising. One might think that higher hardware requirements means a more visually appealing game, and thus<br>
+more successful. However, our findings do not show this.<br>
+<br>
+For future analysis, perhaps deeper analysis could be done on the hardware requirements (looking at graphics cards,<br>
+processors, etc.). Would we see more significant differences in games with low hardware requirements compared to<br>
+those with high hardware requirements? My analysis was perhaps limited by the fact I was only comparing RAM requirements.<br>
+Also, since my analysis consisted only of Steam games, some potential future analysis could include looking at other<br>
+platforms such as Xbox and PlayStation, or other PC game distributors. It would be interesting to see how my findings<br>
+are similar or different compared to other platforms.<br>
 
 </div>
 </div>
